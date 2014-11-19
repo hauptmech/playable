@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="js/d3.v3.min.js"></script>
+        <script language="javascript" src="js/p5.min.js"></script>
+        <script language="javascript" src="js/p5.sound.js"></script>
+        <script language="javascript" src="js/playable.js"></script>
+        <style>
+            body {padding: 0; margin: 0;}
+            #nav {
+                width: 50%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #nav ul {
+                list-style-type: none;
+            }
+            #nav li {
+                display: inline;
+                padding: 0 2em 0 2em ;
+            }
+
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            myname = location.pathname.substring(1).slice(0, -5).replace(/^.*[\\\/]/, '');
+            //automatically use the same name for the svg file.
+            d3.xml(myname+".svg", "image/svg+xml", function(xml) {
+                d3.select("div").node().appendChild(xml.documentElement);
+                playablesetup();
+            });
+
+        </script>
+        <div id="top">
+            <div id="edit" onclick="toggleEdit()">edit</div>
+            <div id="nav"><ul ><li>Go Back</li><li><a href="page2.html">Next page</a></li></ul></div>
+            <div>
+            </body>
+        </html>
