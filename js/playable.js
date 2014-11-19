@@ -14,6 +14,8 @@ var mic, recorder, soundFile;
 var state = 0; // mousePress will increment from Record, to Stop, to Play
 var mainimage;
 var mysound = p5.SoundFile();
+var myelement = null;
+var mytime;
 var active_bubble=null;
 
 function playablesetup(){
@@ -41,9 +43,30 @@ function playablesetup(){
 }
 function actuallyplay(){
   mysound.playMode('restart');
-
-  mysound.loop();
+  mysound.play();
   console.log("playing")
+}
+
+function checkPlayState(){
+  if (mysound.isPlaying() && mytime < mysound.duration()){
+    setTimeout(checkPlayState,200);
+    if (mysound.currentTime() > mytime){mytime = mysound.currentTime()}
+    else {mytime = mytime + mysound.currentTime()}
+    //console.log("playing",mytime,mysound.duration())
+  }
+  else{
+    stopPlaying();
+    //console.log("stopped playing",mysound.currentTime(),mysound.duration())
+
+  }
+}
+
+function stopPlaying(e){
+      mysound.stop();
+      state = 0;
+      active_bubble = null;
+      mytime = 0.0;
+      myelement.style.stroke = "black";
 }
 function myplaysound(e){
   if (editmode){
@@ -75,12 +98,15 @@ function myplaysound(e){
       mysound = p5.prototype.loadSound( myname+"_"+e.id+'.wav',actuallyplay);
       e.style.stroke = "green";
       state = 1;
+      myelement = e;
+      mytime=0.0;
+
+      setTimeout(checkPlayState,250);
 
     }
     else if (e == active_bubble){
-      mysound.stop();
-      state = 0;active_bubble = null;
-      e.style.stroke = "black";
+      stopPlaying();
+
     }
     else {
       console.log("Undefined play state",e.id,active_bubble.id)
